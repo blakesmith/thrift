@@ -27,6 +27,8 @@ ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(SCRIPT_DIR)))
 for libpath in glob.glob(os.path.join(ROOT_DIR, 'lib', 'py', 'build', 'lib.*')):
     for pattern in ('-%d.%d', '-%d%d'):
         postfix = pattern % (sys.version_info[0], sys.version_info[1])
-        if libpath.endswith(postfix):
+        # check for both old- and new-style setuptools path suffixes
+        if libpath.endswith('-%d.%d' % (sys.version_info[0], sys.version_info[1])) \
+            or libpath.endswith('-%s' % sys.implementation.cache_tag):
             sys.path.insert(0, libpath)
             break
